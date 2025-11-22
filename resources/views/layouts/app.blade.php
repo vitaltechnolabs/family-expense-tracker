@@ -128,6 +128,15 @@
         <main>
             {{ $slot }}
         </main>
+
+        <footer class="bg-white border-t border-gray-100 mt-auto">
+            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <p class="text-center text-sm text-gray-500">
+                    Built with ❤️ by <a href="https://vitaltechnolabs.com" target="_blank"
+                        class="text-blue-600 hover:text-blue-800">Vital Technolabs LLP</a>.
+                </p>
+            </div>
+        </footer>
     </div>
 </body>
 

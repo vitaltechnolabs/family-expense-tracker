@@ -13,6 +13,12 @@
         <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
             {{ $slot }}
         </div>
+        <div class="mt-8 text-center">
+            <p class="text-sm text-gray-500">
+                Built with ❤️ by <a href="https://vitaltechnolabs.com" target="_blank"
+                    class="text-blue-600 hover:text-blue-800">Vital Technolabs LLP</a>.
+            </p>
+        </div>
     </div>
 </body>
 
