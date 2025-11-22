@@ -36,4 +36,4 @@ This application is built using a robust and modern technology stack to ensure p
 ---
 
 ### 👨‍💻 Developer
-Built with ❤️ by **Vital Techno Labs**.
+Built with ❤️ by **Vital Technolabs LLP**.
