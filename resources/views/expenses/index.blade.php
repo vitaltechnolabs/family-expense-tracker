@@ -185,10 +185,11 @@
         </div>
 
         <!-- Add Expense Modal -->
-        <div x-show="isModalOpen" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;"
-            x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
-            x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
+        <div x-show="isModalOpen" x-ref="modalContainer" class="fixed inset-0 z-50 overflow-y-auto"
+            style="display: none;" x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0">
 
             <!-- Backdrop -->
             <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeModal()"></div>
@@ -347,8 +348,15 @@
                                     <div
                                         class="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3 pt-4 border-t border-gray-100">
                                         <button type="submit" :disabled="isLoading"
-                                            class="inline-flex w-full justify-center rounded-lg bg-indigo-600 px-3 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200">
-                                            <span x-show="!isLoading">Save Expense</span>
+                                            :class="isSaved ? 'bg-green-600 hover:bg-green-700 focus-visible:outline-green-600' : 'bg-indigo-600 hover:bg-indigo-500 focus-visible:outline-indigo-600'"
+                                            class="inline-flex w-full justify-center rounded-lg px-3 py-2.5 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:col-start-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200">
+                                            <span x-show="!isLoading && !isSaved">Save Expense</span>
+                                            <span x-show="isSaved" class="flex items-center">
+                                                <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                                Saved!
+                                            </span>
                                             <span x-show="isLoading" class="flex items-center">
                                                 <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
                                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -381,6 +389,7 @@
             return {
                 isModalOpen: false,
                 isLoading: false,
+                isSaved: false, // For button feedback
                 showToast: false, // Keeping global toast for other potential uses
                 showSuccessMessage: false, // New inline success state
                 toastMessage: '',
@@ -397,6 +406,7 @@
                 openModal() {
                     this.isModalOpen = true;
                     this.showSuccessMessage = false;
+                    this.isSaved = false;
                     this.errorMessage = '';
                     this.$nextTick(() => {
                         this.$refs.amountInput.focus();
@@ -406,11 +416,13 @@
                     this.isModalOpen = false;
                     this.errorMessage = '';
                     this.showSuccessMessage = false;
+                    this.isSaved = false;
                 },
                 submitExpense() {
                     this.isLoading = true;
                     this.errorMessage = '';
                     this.showSuccessMessage = false;
+                    this.isSaved = false;
 
                     // Simple Validation
                     if (!this.form.amount || !this.form.category_id || !this.form.date) {
@@ -423,10 +435,16 @@
                         .then(response => {
                             // Success
                             this.showSuccessMessage = true;
+                            this.isSaved = true; // Trigger button feedback
+                            this.isLoading = false;
                             
-                            // Auto-hide success message after 3 seconds
+                            // Scroll to top to show success message
+                            this.$refs.modalContainer.scrollTo({ top: 0, behavior: 'smooth' });
+                            
+                            // Auto-hide success states after 3 seconds
                             setTimeout(() => {
                                 this.showSuccessMessage = false;
+                                this.isSaved = false;
                             }, 3000);
 
                             // Reset form partially (Keep Date & Category for speed, clear Amount/Remarks)
