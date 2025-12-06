@@ -52,6 +52,10 @@ class ExpenseController extends Controller
         $categories = Category::where('family_id', $user->family_id)->orderBy('category_name')->get();
         $tags = Tag::where('family_id', $user->family_id)->orderBy('tag_name')->get();
 
+        if ($request->has('refresh_list')) {
+            return view('expenses.partials.expense-rows', compact('expenses'));
+        }
+
         return view('expenses.index', compact('expenses', 'categories', 'tags', 'members', 'canViewAll'));
     }
 
