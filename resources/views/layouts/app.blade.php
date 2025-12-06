@@ -8,6 +8,54 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
+<link rel="manifest" href="{{ asset('manifest.json') }}">
+<link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}">
+<meta name="theme-color" content="#2563eb">
+<script>
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').then(function (registration) {
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function (err) {
+            console.log('ServiceWorker registration failed: ', err);
+        });
+    }
+
+    // PWA Install Prompt Logic
+    document.addEventListener('alpine:init', () => {
+        Alpine.store('pwa', {
+            installPrompt: null,
+            canInstall: false,
+            init() {
+                window.addEventListener('beforeinstallprompt', (e) => {
+                    // Prevent the mini-infobar from appearing on mobile
+                    e.preventDefault();
+                    // Stash the event so it can be triggered later.
+                    this.installPrompt = e;
+                    this.canInstall = true;
+                    console.log('beforeinstallprompt fired, canInstall set to true');
+                });
+                window.addEventListener('appinstalled', () => {
+                    this.canInstall = false;
+                    this.installPrompt = null;
+                    console.log('PWA was installed');
+                });
+            },
+            async install() {
+                if (!this.installPrompt) return;
+                // Show the install prompt
+                this.installPrompt.prompt();
+                // Wait for the user to respond to the prompt
+                const { outcome } = await this.installPrompt.userChoice;
+                console.log(`User response to the install prompt: ${outcome}`);
+                if (outcome === 'accepted') {
+                    this.canInstall = false;
+                }
+                this.installPrompt = null;
+            }
+        });
+    });
+</script>
 
 <body class="bg-gray-100 font-sans antialiased">
     <div class="min-h-screen">
@@ -45,9 +93,13 @@
                             <x-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.edit')">
                                 {{ __('Profile') }}
                             </x-nav-link>
-                            <x-nav-link :href="route('settings.index')" :active="request()->routeIs('settings.*')">
+    <x-nav-link :href="route('settings.index')" :active="request()->routeIs('settings.*')">
                                 {{ __('Settings') }}
                             </x-nav-link>
+                             <!-- Install PWA Button (Desktop) -->
+                            <button x-data x-show="$store.pwa.canInstall" @click="$store.pwa.install()" type="button" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
+                                {{ __('Install App') }}
+                            </button>
                         </div>
                     </div>
                     <div class="hidden sm:flex sm:items-center sm:ml-6">
@@ -103,9 +155,13 @@
                     <x-responsive-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.edit')">
                         {{ __('Profile') }}
                     </x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('settings.index')" :active="request()->routeIs('settings.*')">
+  <x-responsive-nav-link :href="route('settings.index')" :active="request()->routeIs('settings.*')">
                         {{ __('Settings') }}
                     </x-responsive-nav-link>
+                    <!-- Install PWA Button (Mobile) -->
+                    <button x-data x-show="$store.pwa.canInstall" @click="$store.pwa.install()" class="block w-full text-left pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:text-gray-800 focus:bg-gray-50 focus:border-gray-300 transition duration-150 ease-in-out">
+                        {{ __('Install App') }}
+                    </button>
                 </div>
                 <div class="pt-4 pb-1 border-t border-gray-200">
                     <div class="px-4">
