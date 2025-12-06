@@ -64,7 +64,9 @@
                 <div class="flex justify-between h-16">
                     <div class="flex">
                         <div class="shrink-0 flex items-center">
-                            <a href="{{ route('dashboard') }}" class="font-bold text-xl text-blue-600">
+                            <a href="{{ route('dashboard') }}"
+                                class="flex items-center font-bold text-xl text-blue-600">
+                                <img src="{{ asset('images/logo.png') }}" alt="Logo" class="block h-9 w-auto mr-2">
                                 ExpenseTracker
                             </a>
                         </div>
@@ -93,11 +95,12 @@
                             <x-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.edit')">
                                 {{ __('Profile') }}
                             </x-nav-link>
-    <x-nav-link :href="route('settings.index')" :active="request()->routeIs('settings.*')">
+                            <x-nav-link :href="route('settings.index')" :active="request()->routeIs('settings.*')">
                                 {{ __('Settings') }}
                             </x-nav-link>
-                             <!-- Install PWA Button (Desktop) -->
-                            <button x-data x-show="$store.pwa.canInstall" @click="$store.pwa.install()" type="button" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
+                            <!-- Install PWA Button (Desktop) -->
+                            <button x-data x-show="$store.pwa.canInstall" @click="$store.pwa.install()" type="button"
+                                class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
                                 {{ __('Install App') }}
                             </button>
                         </div>
@@ -155,11 +158,12 @@
                     <x-responsive-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.edit')">
                         {{ __('Profile') }}
                     </x-responsive-nav-link>
-  <x-responsive-nav-link :href="route('settings.index')" :active="request()->routeIs('settings.*')">
+                    <x-responsive-nav-link :href="route('settings.index')" :active="request()->routeIs('settings.*')">
                         {{ __('Settings') }}
                     </x-responsive-nav-link>
                     <!-- Install PWA Button (Mobile) -->
-                    <button x-data x-show="$store.pwa.canInstall" @click="$store.pwa.install()" class="block w-full text-left pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:text-gray-800 focus:bg-gray-50 focus:border-gray-300 transition duration-150 ease-in-out">
+                    <button x-data x-show="$store.pwa.canInstall" @click="$store.pwa.install()"
+                        class="block w-full text-left pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:text-gray-800 focus:bg-gray-50 focus:border-gray-300 transition duration-150 ease-in-out">
                         {{ __('Install App') }}
                     </button>
                 </div>
