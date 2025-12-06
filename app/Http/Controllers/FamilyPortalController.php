@@ -28,7 +28,7 @@ class FamilyPortalController extends Controller
             return back()->withErrors(['access_pin' => 'Invalid PIN.']);
         }
 
-        Auth::login($user);
+        Auth::login($user, $request->boolean('remember'));
 
         return redirect()->route('dashboard');
     }

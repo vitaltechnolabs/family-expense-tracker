@@ -88,9 +88,13 @@ class ExpenseController extends Controller
             'tag_id' => $request->tag_id,
             'for_member_id' => $request->for_member_id ?? $user->user_id,
             'payment_method' => $request->payment_method,
-            'from_account_user_id' => $user->user_id, // Simplification: always from logged user's account for now
+            'from_account_user_id' => $user->user_id,
             'remarks' => $request->remarks,
         ]);
+
+        if ($request->wantsJson()) {
+            return response()->json(['message' => 'Expense added successfully.']);
+        }
 
         return redirect()->route('expenses.index')->with('success', 'Expense added successfully.');
     }

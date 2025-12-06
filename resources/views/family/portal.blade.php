@@ -36,6 +36,16 @@
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
 
+                        <!-- Remember Me -->
+                        <div class="block mt-4 text-left">
+                            <label for="remember_me_pin" class="inline-flex items-center">
+                                <input id="remember_me_pin" type="checkbox"
+                                    class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                    name="remember">
+                                <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+                            </label>
+                        </div>
+
                         <div class="items-center px-4 py-3">
                             <button type="submit"
                                 class="px-4 py-2 bg-indigo-600 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300">
