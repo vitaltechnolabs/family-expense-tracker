@@ -40,8 +40,8 @@
                         </button>
                     </div>
 
-                    <!-- Filters (Collapsible on Mobile?) -->
-                    <div class="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                    <!-- Filters -->
+                    <div class="mb-6 p-4 bg-gray-50 rounded-xl border border-gray-100 shadow-sm">
                         <form method="GET" action="{{ route('expenses.index') }}"
                             class="grid grid-cols-1 md:grid-cols-5 gap-4">
                             @if(isset($canViewAll) && $canViewAll)
@@ -49,7 +49,7 @@
                                     <label
                                         class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Member</label>
                                     <select name="member_id"
-                                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                                        class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2.5">
                                         <option value="">All Members</option>
                                         @foreach($members as $member)
                                             <option value="{{ $member->user_id }}" {{ request('member_id') == $member->user_id ? 'selected' : '' }}>{{ $member->name }}</option>
@@ -62,11 +62,12 @@
                                 <label
                                     class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Category</label>
                                 <select name="category_id"
-                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                                    class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2.5">
                                     <option value="">All Categories</option>
                                     @foreach($categories as $category)
                                         <option value="{{ $category->category_id }}" {{ request('category_id') == $category->category_id ? 'selected' : '' }}>
-                                            {{ $category->category_name }}</option>
+                                            {{ $category->category_name }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -75,8 +76,8 @@
                                 <label
                                     class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Tag</label>
                                 <select name="tag_id"
-                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
-                                    <option value="">All Tags</option>
+                                    class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2.5">
+                                    <option value="">No Tag</option>
                                     @foreach ($tags as $tag)
                                         <option value="{{ $tag->tag_id }}" {{ request('tag_id') == $tag->tag_id ? 'selected' : '' }}>{{ $tag->tag_name }}</option>
                                     @endforeach
@@ -88,19 +89,24 @@
                                     class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Start
                                     Date</label>
                                 <input type="date" name="start_date" value="{{ request('start_date') }}"
-                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                                    class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2.5">
                             </div>
                             <div>
                                 <label
                                     class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">End
                                     Date</label>
                                 <input type="date" name="end_date" value="{{ request('end_date') }}"
-                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                                    class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2.5">
                             </div>
-                            <div class="md:col-span-5 flex justify-end">
+                            <div class="md:col-span-5 flex justify-end mt-2">
+                                <a href="{{ route('expenses.index') }}"
+                                    class="mr-3 inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                                    Clear
+                                </a>
                                 <button type="submit"
-                                    class="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-700 text-sm font-medium">Apply
-                                    Filters</button>
+                                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                                    Apply Filters
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -131,17 +137,21 @@
                                 @forelse ($expenses as $expense)
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ $expense->date->format('d M Y') }}</td>
+                                            {{ $expense->date->format('d M Y') }}
+                                        </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm font-medium text-gray-900">
-                                                {{ $expense->category->category_name }}</div>
+                                                {{ $expense->category->category_name }}
+                                            </div>
                                             <div class="text-xs text-gray-500">
-                                                {{ $expense->tag ? $expense->tag->tag_name : '' }}</div>
+                                                {{ $expense->tag ? $expense->tag->tag_name : '' }}
+                                            </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap font-bold text-gray-900">
                                             ₹{{ number_format($expense->amount, 2) }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ $expense->user->name }}</td>
+                                            {{ $expense->user->name }}
+                                        </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             @can('update', $expense)
                                                 <a href="{{ route('expenses.edit', $expense) }}"
@@ -184,8 +194,8 @@
             <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeModal()"></div>
 
             <!-- Modal Panel -->
-            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
+            <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                <div class="relative transform overflow-hidden rounded-xl bg-white text-left shadow-xl transition-all w-full max-w-[95%] sm:my-8 sm:w-full sm:max-w-lg"
                     x-transition:enter="transition ease-out duration-300"
                     x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
@@ -194,97 +204,171 @@
                     x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
 
                     <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                        <h3 class="text-lg font-medium leading-6 text-gray-900 mb-4" id="modal-title">Add New Expense
-                        </h3>
+                        <div class="sm:flex sm:items-start">
+                            <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
+                                <h3 class="text-xl font-semibold leading-6 text-gray-900 mb-6" id="modal-title">
+                                    Add New Expense
+                                </h3>
 
-                        <form @submit.prevent="submitExpense">
-                            <!-- Date & Amount Row -->
-                            <div class="grid grid-cols-2 gap-4 mb-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Date</label>
-                                    <input type="date" x-model="form.date" required
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                <!-- Inline Success Message -->
+                                <div x-show="showSuccessMessage" x-transition:enter="transition ease-out duration-300"
+                                    x-transition:enter-start="opacity-0 -translate-y-2"
+                                    x-transition:enter-end="opacity-100 translate-y-0"
+                                    x-transition:leave="transition ease-in duration-200"
+                                    x-transition:leave-start="opacity-100 translate-y-0"
+                                    x-transition:leave-end="opacity-0 -translate-y-2"
+                                    class="mb-6 rounded-md bg-green-50 p-4 border border-green-200">
+                                    <div class="flex">
+                                        <div class="flex-shrink-0">
+                                            <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd"
+                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="text-sm font-medium text-green-800">
+                                                Expense saved successfully!
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Amount (₹)</label>
-                                    <input type="number" step="0.01" x-model="form.amount" x-ref="amountInput" required
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                                        placeholder="0.00">
-                                </div>
+
+                                <form @submit.prevent="submitExpense" class="space-y-5">
+                                    <!-- Date & Amount -->
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                                            <input type="date" x-model="form.date" required
+                                                class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2.5">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Amount
+                                                (₹)</label>
+                                            <div class="relative rounded-md shadow-sm">
+                                                <div
+                                                    class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                                    <span class="text-gray-500 sm:text-sm">₹</span>
+                                                </div>
+                                                <input type="number" step="0.01" x-model="form.amount"
+                                                    x-ref="amountInput" required
+                                                    class="block w-full rounded-lg border-gray-300 pl-7 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2.5"
+                                                    placeholder="0.00">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Category & Tag -->
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                                            <select x-model="form.category_id" required
+                                                class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2.5">
+                                                <option value="">Select Category</option>
+                                                @foreach($categories as $category)
+                                                    <option value="{{ $category->category_id }}">
+                                                        {{ $category->category_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Tag <span
+                                                    class="text-gray-400 font-normal">(Optional)</span></label>
+                                            <select x-model="form.tag_id"
+                                                class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2.5">
+                                                <option value="">No Tag</option>
+                                                @foreach($tags as $tag)
+                                                    <option value="{{ $tag->tag_id }}">{{ $tag->tag_name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Payment & Member -->
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Payment
+                                                Method</label>
+                                            <select x-model="form.payment_method" required
+                                                class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2.5">
+                                                <option value="Cash">Cash</option>
+                                                <option value="Net Banking">Net Banking</option>
+                                                <option value="UPI">UPI</option>
+                                                <option value="Cheque">Cheque</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">For
+                                                Member</label>
+                                            <select x-model="form.for_member_id"
+                                                class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2.5">
+                                                <option value="">Myself</option>
+                                                @foreach($members as $member)
+                                                    <option value="{{ $member->user_id }}">{{ $member->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Remarks -->
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Remarks</label>
+                                        <textarea x-model="form.remarks" rows="3"
+                                            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2"
+                                            placeholder="Add any notes here..."></textarea>
+                                    </div>
+
+                                    <!-- Error Message -->
+                                    <div x-show="errorMessage" x-transition:enter="transition ease-out duration-300"
+                                        x-transition:enter-start="opacity-0 translate-y-[-10px]"
+                                        x-transition:enter-end="opacity-100 translate-y-0"
+                                        class="rounded-md bg-red-50 p-4">
+                                        <div class="flex">
+                                            <div class="flex-shrink-0">
+                                                <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20"
+                                                    fill="currentColor">
+                                                    <path fill-rule="evenodd"
+                                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                                        clip-rule="evenodd" />
+                                                </svg>
+                                            </div>
+                                            <div class="ml-3">
+                                                <h3 class="text-sm font-medium text-red-800">There were errors with your
+                                                    submission</h3>
+                                                <div class="mt-2 text-sm text-red-700">
+                                                    <p x-text="errorMessage"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Actions -->
+                                    <div
+                                        class="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3 pt-4 border-t border-gray-100">
+                                        <button type="submit" :disabled="isLoading"
+                                            class="inline-flex w-full justify-center rounded-lg bg-indigo-600 px-3 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200">
+                                            <span x-show="!isLoading">Save Expense</span>
+                                            <span x-show="isLoading" class="flex items-center">
+                                                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                    <circle class="opacity-25" cx="12" cy="12" r="10"
+                                                        stroke="currentColor" stroke-width="4"></circle>
+                                                    <path class="opacity-75" fill="currentColor"
+                                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                                    </path>
+                                                </svg>
+                                                Saving...
+                                            </span>
+                                        </button>
+                                        <button type="button" @click="closeModal()"
+                                            class="mt-3 inline-flex w-full justify-center rounded-lg bg-white px-3 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0 transition-colors duration-200">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
-
-                            <!-- Category & Tag Row -->
-                            <div class="grid grid-cols-2 gap-4 mb-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Category</label>
-                                    <select x-model="form.category_id" required
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
-                                        <option value="">Select Category</option>
-                                        @foreach($categories as $category)
-                                            <option value="{{ $category->category_id }}">{{ $category->category_name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Tag (Optional)</label>
-                                    <select x-model="form.tag_id"
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
-                                        <option value="">No Tag</option>
-                                        @foreach($tags as $tag)
-                                            <option value="{{ $tag->tag_id }}">{{ $tag->tag_name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!-- Payment Method & For Whom Row -->
-                            <div class="grid grid-cols-2 gap-4 mb-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Payment Method</label>
-                                    <select x-model="form.payment_method" required
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
-                                        <option value="Cash">Cash</option>
-                                        <option value="Net Banking">Net Banking</option>
-                                        <option value="UPI">UPI</option>
-                                        <option value="Cheque">Cheque</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">For Member</label>
-                                    <select x-model="form.for_member_id"
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
-                                        <option value="">Myself</option>
-                                        @foreach($members as $member)
-                                            <option value="{{ $member->user_id }}">{{ $member->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!-- Remarks -->
-                            <div class="mb-4">
-                                <label class="block text-sm font-medium text-gray-700">Remarks</label>
-                                <textarea x-model="form.remarks" rows="2"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"></textarea>
-                            </div>
-
-                            <!-- Validation Errors -->
-                            <div x-show="errorMessage"
-                                class="mb-4 p-2 bg-red-100 text-red-700 text-sm rounded border border-red-200"
-                                x-text="errorMessage"></div>
-
-                            <!-- Buttons -->
-                            <div class="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
-                                <button type="submit" :disabled="isLoading"
-                                    class="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 sm:col-start-2 disabled:opacity-50">
-                                    <span x-show="!isLoading">Save Expense</span>
-                                    <span x-show="isLoading">Saving...</span>
-                                </button>
-                                <button type="button" @click="closeModal()"
-                                    class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0">Cancel</button>
-                            </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -297,7 +381,8 @@
             return {
                 isModalOpen: false,
                 isLoading: false,
-                showToast: false,
+                showToast: false, // Keeping global toast for other potential uses
+                showSuccessMessage: false, // New inline success state
                 toastMessage: '',
                 errorMessage: '',
                 form: {
@@ -311,6 +396,8 @@
                 },
                 openModal() {
                     this.isModalOpen = true;
+                    this.showSuccessMessage = false;
+                    this.errorMessage = '';
                     this.$nextTick(() => {
                         this.$refs.amountInput.focus();
                     });
@@ -318,10 +405,12 @@
                 closeModal() {
                     this.isModalOpen = false;
                     this.errorMessage = '';
+                    this.showSuccessMessage = false;
                 },
                 submitExpense() {
                     this.isLoading = true;
                     this.errorMessage = '';
+                    this.showSuccessMessage = false;
 
                     // Simple Validation
                     if (!this.form.amount || !this.form.category_id || !this.form.date) {
@@ -333,7 +422,12 @@
                     axios.post('{{ route("expenses.store") }}', this.form)
                         .then(response => {
                             // Success
-                            this.triggerToast('Expense saved successfully!');
+                            this.showSuccessMessage = true;
+                            
+                            // Auto-hide success message after 3 seconds
+                            setTimeout(() => {
+                                this.showSuccessMessage = false;
+                            }, 3000);
 
                             // Reset form partially (Keep Date & Category for speed, clear Amount/Remarks)
                             this.form.amount = '';
@@ -352,9 +446,12 @@
                         })
                         .catch(error => {
                             this.isLoading = false;
+                            console.error('Submission Error:', error);
                             if (error.response && error.response.data && error.response.data.errors) {
                                 // Join all error messages
                                 this.errorMessage = Object.values(error.response.data.errors).flat().join(', ');
+                            } else if (error.message) {
+                                this.errorMessage = error.message;
                             } else {
                                 this.errorMessage = 'Something went wrong. Please try again.';
                             }
