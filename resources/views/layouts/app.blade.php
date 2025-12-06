@@ -34,14 +34,22 @@
                     e.preventDefault();
                     // Stash the event so it can be triggered later.
                     this.installPrompt = e;
-                    this.canInstall = true;
-                    console.log('beforeinstallprompt fired, canInstall set to true');
+                    
+                    // Check if user dismissed it in this session
+                    if (!sessionStorage.getItem('pwaBannerDismissed')) {
+                        this.canInstall = true;
+                    }
+                    console.log('beforeinstallprompt fired');
                 });
                 window.addEventListener('appinstalled', () => {
                     this.canInstall = false;
                     this.installPrompt = null;
                     console.log('PWA was installed');
                 });
+            },
+            dismiss() {
+                this.canInstall = false;
+                sessionStorage.setItem('pwaBannerDismissed', 'true');
             },
             async install() {
                 if (!this.installPrompt) return;
@@ -61,6 +69,40 @@
 
 <body class="bg-gray-100 font-sans antialiased">
     <div class="min-h-screen">
+        <!-- PWA Install Banner -->
+        <div x-data x-show="$store.pwa.canInstall" x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="-translate-y-full" x-transition:enter-end="translate-y-0"
+            class="bg-indigo-600 text-white px-4 py-3 shadow-md relative z-50">
+            <div class="flex items-center justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center">
+                    <span class="flex p-2 rounded-lg bg-indigo-800">
+                        <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                    </span>
+                    <p class="ml-3 font-medium truncate">
+                        <span class="md:hidden">Install App for better experience!</span>
+                        <span class="hidden md:inline">Install the Family Expense Tracker app for a better
+                            experience!</span>
+                    </p>
+                </div>
+                <div class="flex items-center">
+                    <button @click="$store.pwa.install()" type="button"
+                        class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-indigo-600 bg-white hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Install
+                    </button>
+                    <button @click="$store.pwa.dismiss()" type="button"
+                        class="-mr-1 flex p-2 rounded-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2">
+                        <span class="sr-only">Dismiss</span>
+                        <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
         <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between h-16">

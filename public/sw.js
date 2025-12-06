@@ -7,5 +7,7 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-    event.respondWith(fetch(event.request));
+    // We intentionally do NOT call event.respondWith() here.
+    // This allows the browser to handle the network request naturally.
+    // This listener is required for the browser to recognize this as an installable PWA.
 });
